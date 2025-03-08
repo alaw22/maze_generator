@@ -5,7 +5,7 @@ from window import Window
 from line import Line
 
 class Cell:
-    def __init__(self,window:Window):
+    def __init__(self,window:Window = None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
@@ -15,24 +15,44 @@ class Cell:
         self._y1 = None
         self._y2 = None
         self._win = window
+        self.visited = False
+
         
     def draw(self,x1,y1,x2,y2):
+        if self._win is None:
+            return
+        
         self._x1 = x1
         self._x2 = x2
         self._y1 = y1
         self._y2 = y2
+        
+        top_wall = Line(Point(x1,y1),Point(x2,y1))
+        left_wall = Line(Point(x1,y1),Point(x1,y2))
+        right_wall = Line(Point(x2,y1),Point(x2,y2))
+        bottom_wall = Line(Point(x1,y2),Point(x2,y2))
+
         if self.has_top_wall:
-            line = Line(Point(x1,y1),Point(x2,y1))
-            self._win.draw_line(line,fill_color='black')
+            top_wall_color = "black"
+        else:
+            top_wall_color = "#d9d9d9"
         if self.has_bottom_wall:
-            line = Line(Point(x1,y2),Point(x2,y2))
-            self._win.draw_line(line,fill_color='black')
+            bottom_wall_color = "black"
+        else:
+            bottom_wall_color = "#d9d9d9"
         if self.has_right_wall:
-            line = Line(Point(x2,y1),Point(x2,y2))
-            self._win.draw_line(line,fill_color='black')
+            right_wall_color = "black"
+        else:
+            right_wall_color = "#d9d9d9"
         if self.has_left_wall:
-            line = Line(Point(x1,y1),Point(x1,y2))
-            self._win.draw_line(line,fill_color='black')
+            left_wall_color = "black"
+        else:
+            left_wall_color = "#d9d9d9"
+
+        self._win.draw_line(top_wall,fill_color=top_wall_color)
+        self._win.draw_line(left_wall,fill_color=left_wall_color)
+        self._win.draw_line(right_wall,fill_color=right_wall_color)
+        self._win.draw_line(bottom_wall,fill_color=bottom_wall_color)
 
     def draw_move(self, to_cell, undo=False):
 

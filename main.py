@@ -2,36 +2,27 @@ from window import Window
 from point import Point
 from line import Line
 from cell import Cell
+from maze import Maze
 
 def main():
-    win = Window(800, 600)
+    height = 600
+    width = 800
+    win = Window(width,height)
 
-    c1 = Cell(win)
-    c1.has_right_wall = False
-    c1.draw(50, 50, 100, 100)
+    limiting_length = min(height,width)
 
-    c2 = Cell(win)
-    c2.has_left_wall = False
-    c2.has_bottom_wall = False
-    c2.draw(100, 50, 150, 100)
+    cell_size = 30
+    x_offset = cell_size//2 if width < height else cell_size//2 + (width - height)//2
+    y_offset = cell_size//2 if height < width else cell_size//2 + (height - width)//2
 
-    c3 = Cell(win)
-    c3.has_top_wall = False
-    c3.has_bottom_wall = False
-    c3.draw(100, 100, 150, 150)
-
-
-
-    c3.draw_move(c2,undo=True)
-    c1.draw_move(c2,undo=False)
-
-    # c = Cell(win)
-    # c.has_bottom_wall = False
-    # c.draw(225, 225, 250, 250)
-
-    # c = Cell(win)
-    # c.has_top_wall = False
-    # c.draw(300, 300, 500, 500)
+    maze = Maze(x_offset,
+                y_offset,
+                (limiting_length-cell_size)//cell_size,
+                (limiting_length-cell_size)//cell_size,
+                cell_size,
+                cell_size,
+                win)
+    maze.solve()
 
     win.wait_for_close()
 
